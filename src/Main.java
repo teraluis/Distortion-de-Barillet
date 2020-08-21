@@ -19,10 +19,10 @@ public class Main {
 		System.out.println("Processing the image");
 		BufferedImage image = ImageIO.read(new File("src/postal.png"));
 	    // parameters for correction
-	    double paramA = 0.017715; // n'affecte que les pixels le plus à l'exterieur de l'image 0.02
-	    double paramB = 0.026731; // la plus part de ces cas ne nécessitent qu'une optimisation b 0.02
-	    double paramC = 0.026731; // most uniform correction 0.05 0.026731
-	    double paramD = 1.0 - paramA - paramB - paramC; // décrit la mise à l'échelle linéaire de l'image
+	    double paramA = 0.017715; // n'affecte que les pixels le plus à l'exterieur de l'image 0.02 equivalent au point A
+	    double paramB = 0.026731; // la plus part de ces cas ne nécessitent qu'une optimisation b 0.02 equivalent au point B
+	    double paramC = 0.026731; // most uniform correction 0.05 0.026731 equivalent au point A'
+	    double paramD = 1.0 - paramA - paramB - paramC; // décrit la mise à l'échelle linéaire de l'image  equivalent au point B'
         int width = image.getWidth();
         int height = image.getHeight();
         int[] pixels = new int[width * height];
@@ -54,23 +54,26 @@ public class Main {
 		            // distance ou rayon de l'image avec les parametres correctionels
 		            double srcR = (paramA * dstR * dstR * dstR + paramB * dstR * dstR + paramC * dstR + paramD) * dstR;
 
-		            // factor = ancienne distance sur nouvelle distance
+		            // coefficient directionel de fresnel http://www.chimix.com/an8/cap8/cap87.htm
 		            double factor = Math.abs(dstR / srcR);
 
-		            // cordonnées dans l'image source
+		            // cordonnées dans l'image source en utilisant le coefficent de fresnel
 		            double srcXd = centerX + (deltaX * factor * d);
 		            double srcYd = centerY + (deltaY * factor * d);
 
-		            // pas encore d'interpolation juste les points les plus proches
+		            // on arrondi au point le plus proche
 		            int srcX = (int) srcXd;
 		            int srcY = (int) srcYd;
-
+		            //calcul de la position du vecteur considerez que width = 1 pour simplifier 
 	                int dstPos = j * width + i;
 	                System.out.println("position "+ dstPos);
+	                //on obtien les cordonnées finales (x,y) considerez que width = 1 tjs pour mieux comprendre
 	                pixels[dstPos] = pixelsCopy[srcY * width + srcX];
+	                
 		            
 				}
 			}
+			//on convertit la matrice en image
 			textToImage("src/output2.png", width, height, pixels);
 			System.out.println("c'est fini");
 		}catch(IOException e) {
