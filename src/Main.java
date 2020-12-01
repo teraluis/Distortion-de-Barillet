@@ -19,10 +19,10 @@ public class Main {
 		System.out.println("Processing the image");
 		BufferedImage image = ImageIO.read(new File("src/postal.png"));
 	    // parameters for correction
-	    double paramA = 0.017715; // n'affecte que les pixels le plus à l'exterieur de l'image 0.02 equivalent au point A
-	    double paramB = 0.026731; // la plus part de ces cas ne nécessitent qu'une optimisation b 0.02 equivalent au point B
+	    double paramA = 0.017715; // n'affecte que les pixels le plus ? l'exterieur de l'image 0.02 equivalent au point A
+	    double paramB = 0.026731; // la plus part de ces cas ne n?cessitent qu'une optimisation b 0.02 equivalent au point B
 	    double paramC = 0.026731; // most uniform correction 0.05 0.026731 equivalent au point A'
-	    double paramD = 1.0 - paramA - paramB - paramC; // décrit la mise à l'échelle linéaire de l'image  equivalent au point B'
+	    double paramD = 1.0 - paramA - paramB - paramC; // d?crit la mise ? l'?chelle lin?aire de l'image  equivalent au point B'
         int width = image.getWidth();
         int height = image.getHeight();
         int[] pixels = new int[width * height];
@@ -44,7 +44,7 @@ public class Main {
 			System.out.println("debut de la boucle for");
 			for(int i =0; i< width ; i++) {
 				for(int j =0; j< height ; j++) {
-		            // cordonnées cartesiennes du vecteur par rapport au centre de l'image
+		            // cordonn?es cartesiennes du vecteur par rapport au centre de l'image
 		            double deltaX = (i - centerX) / d;
 		            double deltaY = (j - centerY) / d;
 		            System.out.println("delta ["+deltaX+"px,"+deltaY+"px]");
@@ -57,7 +57,7 @@ public class Main {
 		            // coefficient directionel de fresnel http://www.chimix.com/an8/cap8/cap87.htm
 		            double factor = Math.abs(dstR / srcR);
 
-		            // cordonnées dans l'image source en utilisant le coefficent de fresnel
+		            // cordonn?es dans l'image source en utilisant le coefficent de fresnel
 		            double srcXd = centerX + (deltaX * factor * d);
 		            double srcYd = centerY + (deltaY * factor * d);
 
@@ -67,7 +67,7 @@ public class Main {
 		            //calcul de la position du vecteur considerez que width = 1 pour simplifier 
 	                int dstPos = j * width + i;
 	                System.out.println("position "+ dstPos);
-	                //on obtien les cordonnées finales (x,y) considerez que width = 1 tjs pour mieux comprendre
+	                //on obtien les cordonn?es finales (x,y) considerez que width = 1 tjs pour mieux comprendre
 	                pixels[dstPos] = pixelsCopy[srcY * width + srcX];
 	                
 		            
